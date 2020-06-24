@@ -3,6 +3,9 @@ package org.devio.rn.splashscreen;
 import android.app.Activity;
 import android.app.Dialog;
 import android.os.Build;
+import android.widget.ImageView;
+
+import com.bumptech.glide.Glide;
 
 import java.lang.ref.WeakReference;
 
@@ -17,6 +20,35 @@ import java.lang.ref.WeakReference;
 public class SplashScreen {
     private static Dialog mSplashDialog;
     private static WeakReference<Activity> mActivity;
+
+ 	/**
+	* GLIDE edit
+	*/
+    public static void show(final Activity activity, final int imgViewId, final int drawableId) {
+        if (activity == null) return;
+        mActivity = new WeakReference<Activity>(activity);
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (!activity.isFinishing()) {
+                    mSplashDialog = new Dialog(activity, R.style.SplashScreen_Fullscreen);
+                    mSplashDialog.setContentView(R.layout.launch_screen);
+
+                    ImageView imageView = mSplashDialog.findViewById(imgViewId);
+
+                    Glide.with(activity)
+                            .load(drawableId)
+                            .into(imageView);
+
+                    mSplashDialog.setCancelable(false);
+
+                    if (!mSplashDialog.isShowing()) {
+                        mSplashDialog.show();
+                    }
+                }
+            }
+        });
+    }
 
     /**
      * 打开启动屏

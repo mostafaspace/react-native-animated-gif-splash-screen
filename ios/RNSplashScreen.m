@@ -1,5 +1,4 @@
-/**
- * SplashScreen
+ /* SplashScreen
  * 启动屏
  * from：http://www.devio.org
  * Author:CrazyCodeBoy
@@ -9,6 +8,7 @@
 
 #import "RNSplashScreen.h"
 #import <React/RCTBridge.h>
+#import "FLAnimatedImage.h"
 
 static bool waiting = true;
 static bool addedJsLoadErrorObserver = false;
@@ -32,16 +32,13 @@ RCT_EXPORT_MODULE(SplashScreen)
     }
 }
 
-+ (void)showSplash:(NSString*)splashScreen inRootView:(UIView*)rootView {
++ (void)showSplash:(NSString*)splashScreen inRootView:(UIView*)rootView loadingView:(UIView *)myloadingView{
     if (!loadingView) {
-        loadingView = [[[NSBundle mainBundle] loadNibNamed:splashScreen owner:self options:nil] objectAtIndex:0];
-        CGRect frame = rootView.frame;
-        frame.origin = CGPointMake(0, 0);
-        loadingView.frame = frame;
+        loadingView = myloadingView;
+        [rootView addSubview:loadingView];
+        myloadingView.frame = CGRectMake(0.0, 0.0, rootView.frame.size.width, rootView.frame.size.height);
     }
     waiting = false;
-    
-    [rootView addSubview:loadingView];
 }
 
 + (void)hide {
@@ -71,3 +68,4 @@ RCT_EXPORT_METHOD(show) {
 }
 
 @end
+
